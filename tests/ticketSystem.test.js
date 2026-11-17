@@ -9,6 +9,7 @@ describe("bus ticket booking", () => {
                 <input id="seats" value="1">
             </form>
             <p id="message"></p>
+            <p id="availableSeats"></p>
         `;
 
         jest.isolateModules(() => {
@@ -33,6 +34,31 @@ describe("bus ticket booking", () => {
 
         expect(document.getElementById("message").innerText).toBe(
             "Booking confirmed for Alex to Wellington. Seats: 3. Total fare: $30."
+        );
+    });
+
+    test("reduces the available seat count after a successful booking", () => {
+        document.getElementById("seats").value = "3";
+
+        const form = document.getElementById("bookingForm");
+        form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+        expect(document.getElementById("availableSeats").innerText).toBe(
+            "Available seats: 37."
+        );
+    });
+
+    test("rejects a booking for more seats than are available", () => {
+        document.getElementById("seats").value = "41";
+
+        const form = document.getElementById("bookingForm");
+        form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+        expect(document.getElementById("message").innerText).toBe(
+            "Only 40 seats are available."
+        );
+        expect(document.getElementById("availableSeats").innerText).toBe(
+            "Available seats: 40."
         );
     });
 });
