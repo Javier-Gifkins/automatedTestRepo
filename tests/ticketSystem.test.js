@@ -24,4 +24,15 @@ describe("bus ticket booking", () => {
             "Booking confirmed for Alex to Wellington."
         );
     });
+
+    test("calculates the total fare from the number of seats booked", () => {
+        document.getElementById("seats").value = "3";
+
+        const form = document.getElementById("bookingForm");
+        form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+        expect(document.getElementById("message").innerText).toBe(
+            "Booking confirmed for Alex to Wellington. Seats: 3. Total fare: $30."
+        );
+    });
 });
